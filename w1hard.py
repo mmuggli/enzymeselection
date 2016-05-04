@@ -57,13 +57,13 @@ for (u, v) in all_pairs:
         econtigs.append('#' * (l) + enz_str_of_pair(u, v))
         econtigs.append('#' * (l + 1) + enz_str_of_pair(u, v))
         l += 2
-
+print("\n".join(econtigs))
         
 # (1) vertex selection: validateion of the selection of the endpoints of the edges
 print("Vertex selection contigs (1.a):")
 v1acontigs = []
 x = 1
-lp = 1 # l' el-prime
+lp = l #1 # l' el-prime
 for (u, v) in antiedges:
     for k in range(len(antiedges) + 1):
         v1acontigs.append('#' * x +  enz_str_of_pair(u, v) + '#' * lp + enz_str_of_node(u))
@@ -74,7 +74,7 @@ print("\n".join(v1acontigs))
 print("Vertex selection contigs (1.b):")
 v1bcontigs = []
 x = 1
-lpp = 1 # l' el-prime
+lpp = lp #1 # l' el-prime
 for (u, v) in antiedges:
     for k in range(len(antiedges) + 1):
         v1bcontigs.append('#' * x +  enz_str_of_pair(u, v) + '#' * x +  enz_str_of_pair(u, v) + '#' * lpp + enz_str_of_node(v))       
@@ -86,7 +86,7 @@ print("\n".join(v1bcontigs))
 print("Vertex selection contigs (2.a):")
 v2acontigs = []
 x = 1
-lppp = 1 # l' el-prime
+lppp = lpp#1 # l' el-prime
 for (u, v) in antiedges:
     for k in range(len(antiedges) + 1):
         v2acontigs.append('#' * x +  enz_str_of_node(u) + '#' * lppp + enz_str_of_pair(u, v))       
@@ -97,7 +97,7 @@ print("\n".join(v2acontigs))
 print("Vertex selection contigs (2.b):")
 v2bcontigs = []
 x = 1
-lpppp = 1 # l' el-prime
+lpppp = lppp#1 # l' el-prime
 for (u, v) in antiedges:
     for k in range(len(antiedges) + 1):
         v2bcontigs.append('#' * x +  enz_str_of_node(v) + '#' * lpppp + enz_str_of_pair(u, v))       
@@ -131,7 +131,10 @@ def digest(contig, enzymes):
 
 def valid(enzymes, contigs):
     digested = [digest(contig, enzymes) for contig in contigs if digest(contig, enzymes)]
+    print("\n".join([str(s) for s in digested]))
     return len(digested) == len(set(digested))
 
 selected_enzymes = ["0110", "1000", "0001"]
 print("valid enzymes(", selected_enzymes, "): ", valid(selected_enzymes, contigs))
+# for e in combinations(enzymes, 3):
+#     if valid(e, contigs): print(e)
