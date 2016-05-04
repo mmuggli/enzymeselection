@@ -43,63 +43,95 @@ print("disjoint pairs:")
 for (u, v) in antiedges:
     print(u, "(",enz_str_of_node(u),") <-> ",v, "(",enz_str_of_node(v), ")  =",enz_str_of_pair(u, v))
 
-contigs = []
+econtigs = []
 print("Enzyme selection contigs:")
 # enzyme selection contigs
 l = 0
 for (u, v) in all_pairs:
     if two_intervals[u] & two_intervals[v]:
-        print('#' * l + enz_str_of_pair(u, v))
-        print('#' * l + enz_str_of_pair(u, v))
+        econtigs.append('#' * l + enz_str_of_pair(u, v))
+        econtigs.append('#' * l + enz_str_of_pair(u, v))
         l += 1
     else:
         # are these necessary? by construction, these will either not be in C' (if the edge enzyme is not selected) or else both be in C and by construction not contradict definition of C
-        print('#' * (l) + enz_str_of_pair(u, v))
-        print('#' * (l + 1) + enz_str_of_pair(u, v))
+        econtigs.append('#' * (l) + enz_str_of_pair(u, v))
+        econtigs.append('#' * (l + 1) + enz_str_of_pair(u, v))
         l += 2
 
         
 # (1) vertex selection: validateion of the selection of the endpoints of the edges
 print("Vertex selection contigs (1.a):")
+v1acontigs = []
 x = 1
 lp = 1 # l' el-prime
 for (u, v) in antiedges:
     for k in range(len(antiedges) + 1):
-        print('#' * x +  enz_str_of_pair(u, v) + '#' * lp + enz_str_of_node(u))
+        v1acontigs.append('#' * x +  enz_str_of_pair(u, v) + '#' * lp + enz_str_of_node(u))
         lp += 1
     x += 1
+print("\n".join(v1acontigs))    
 
 print("Vertex selection contigs (1.b):")
+v1bcontigs = []
 x = 1
 lpp = 1 # l' el-prime
 for (u, v) in antiedges:
     for k in range(len(antiedges) + 1):
-        print('#' * x +  enz_str_of_pair(u, v) + '#' * x +  enz_str_of_pair(u, v) + '#' * lpp + enz_str_of_node(v))       
+        v1bcontigs.append('#' * x +  enz_str_of_pair(u, v) + '#' * x +  enz_str_of_pair(u, v) + '#' * lpp + enz_str_of_node(v))       
         lpp += 1
     x += 1
-
+print("\n".join(v1bcontigs))
+    
 # (2) vertex selection: validateion of the selection of the edges of the endpoints
 print("Vertex selection contigs (2.a):")
+v2acontigs = []
 x = 1
 lppp = 1 # l' el-prime
 for (u, v) in antiedges:
     for k in range(len(antiedges) + 1):
-        print('#' * x +  enz_str_of_node(u) + '#' * lppp + enz_str_of_pair(u, v))       
+        v2acontigs.append('#' * x +  enz_str_of_node(u) + '#' * lppp + enz_str_of_pair(u, v))       
         lppp += 1
     x += 1
-
+print("\n".join(v2acontigs))
 
 print("Vertex selection contigs (2.b):")
+v2bcontigs = []
 x = 1
 lpppp = 1 # l' el-prime
 for (u, v) in antiedges:
     for k in range(len(antiedges) + 1):
-        print('#' * x +  enz_str_of_node(v) + '#' * lpppp + enz_str_of_pair(u, v))       
+        v2bcontigs.append('#' * x +  enz_str_of_node(v) + '#' * lpppp + enz_str_of_pair(u, v))       
         lpppp += 1
     x += 1
+print("\n".join(v2bcontigs))
 
-
-        
+contigs = econtigs + v1acontigs + v1bcontigs + v2acontigs + v2bcontigs        
     
-print("\n".join(contigs))
+# code from http://stackoverflow.com/questions/3873361/finding-multiple-occurrences-of-a-string-within-a-string-in-python
+def findall(sub, string):
+    """
+    >>> text = "Allowed Hello Hollow"
+    >>> tuple(findall('ll', text))
+    (1, 10, 16)
+    """
+    index = 0 - len(sub)
+    try:
+        while True:
+            index = string.index(sub, index + len(sub))
+            yield index
+    except ValueError:
+        pass
 
+def digest(contig, enzymes):
+    positions = set()
+    for enzyme in enzymes:
+        positions |= set(findall(enzyme, contig))
+    return frozenset(positions)
+
+
+def valid(enzymes, contigs):
+    digested = [digest(contig, enzymes) for contig in contigs if digest(contig, enzymes)]
+    return len(digested) == len(set(digested))
+
+selected_enzymes = ["0110", "1000", "0001"]
+print("valid enzymes(", selected_enzymes, "): ", valid(selected_enzymes, contigs))
