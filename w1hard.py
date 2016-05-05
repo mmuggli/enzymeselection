@@ -11,10 +11,10 @@ from math import *
 #                  set(range(11, 18 + 1)) | set(range(29, 32 + 1))]
 print('2-interval family from Fig. 1 of "On the parameterized complexity of multiple-interval graph problems" Michael R. Fellows a , Danny Hermelinb, Frances Rosamonda , Stephane Vialette c')
 
-two_intervals = [set(range(0,2 + 1)) | set(range(8,10 + 1)),
-                 set(range(1,3 + 1)) | set(range(13,15 + 1)),
-                 set(range(4,7 + 1)) | set(range(11,14 + 1)),
-                 set(range(5,6 + 1)) | set(range(9,12 + 1))]
+two_intervals = [set(range(0, 2 + 1)) | set(range(8,  10 + 1)),
+                 set(range(1, 3 + 1)) | set(range(13, 15 + 1)),
+                 set(range(4, 7 + 1)) | set(range(11, 14 + 1)),
+                 set(range(5, 6 + 1)) | set(range(9,  12 + 1))]
 
 print("integer (discrete) transcription:", two_intervals)
 
@@ -41,7 +41,7 @@ def enz_str_of_pair(u, v):
     return enzymes[i]
 print("disjoint pairs:")
 for (u, v) in antiedges:
-    print(u, "(",enz_str_of_node(u),") <-> ",v, "(",enz_str_of_node(v), ")  =",enz_str_of_pair(u, v))
+    print(u, "(", enz_str_of_node(u), ") <-> ", v, "(",enz_str_of_node(v), ")  =", enz_str_of_pair(u, v))
 
 econtigs = []
 print("Enzyme selection contigs:")
